@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/html.html to edit this template
+-->
+<html>
+    <head>
+        <title>Zadanie</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="news-2" class="news-content-container-flex">
+            <div class="news-title">        
+                <span id="printTitle">
+                </span>
+            </div>
+            <div class="news-content-1">
+                <span id="printBody">
+                </span>
+            </div>
+        </div>
+        <div class="square" ></div>
+    </body>
+</html>
+<script>
+
+    const promise = fetch('https://jsonplaceholder.typicode.com/posts');
+    promise.then((response) => {
+        return response.json();
+    })
+            .then(data => {
+                data.forEach(sentence => {
+
+                    var markup = `
+        <b><p>id</p><p>${sentence.id}</p>
+        <p>title</p><p>${sentence.title}</p>
+        <p>body</p><p>${sentence.body}</p></b>
+            
+      `;
+                    const divElem = document.createElement("div")
+                    divElem.id = "whatever";
+                    divElem.classList.add("class1", "class2", "etc");
+                    divElem.innerHTML = markup;
+                    document.querySelector(".square").insertAdjacentElement("beforeend", divElem);
+
+                    const comments = fetch('https://jsonplaceholder.typicode.com/comments');
+                    comments.then((response) => {
+                        return response.json();
+                    })
+                            .then(data => {
+                                data.forEach(commentsSentence => {
+                                    if (commentsSentence.postId === sentence.id) {
+
+                                        var commentsMarkup = `
+        <p>post id</p><p>${commentsSentence.postId}</p>
+        <p>name</p><p>${commentsSentence.name}</p>
+            <p>email</p><p>${commentsSentence.email}</p>
+        <p>body</p><p>${commentsSentence.body}</p>
+            
+      `;
+
+                                        divElem.innerHTML += commentsMarkup;
+                                        document.querySelector(".square").insertAdjacentElement("beforeend", divElem)
+
+                                    }
+                                });
+                            })
+
+                });
+            })
+            .catch(error => console.log(error));
+
+
+</script>
